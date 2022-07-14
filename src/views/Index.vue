@@ -1,5 +1,6 @@
 <template>
   <div class="Index">
+    <!-- <router-view/>
     <van-tabbar v-model="active" inactive-color="#000" active-color="#e97e7e">
       <van-tabbar-item name="首页" icon="home-o" replace to="/home"
         >首页</van-tabbar-item
@@ -13,7 +14,8 @@
       <van-tabbar-item name="我的" icon="user-o" replace to="/me"
         >我的</van-tabbar-item
       >
-    </van-tabbar>
+    </van-tabbar> -->
+    这里是主页
   </div>
 </template>
 
