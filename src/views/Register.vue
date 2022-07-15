@@ -69,6 +69,20 @@
         >注册</van-button
       >
     </div>
+    <!-- <div>
+        <van-checkbox 
+        v-model="checked" 
+        shape="square"
+        icon-size="14px"
+        
+        >
+        阅读并接受
+          《百度用户协议》、
+          《儿童个人信息保护声明》
+          及
+          《百度隐私权保护声明》
+        </van-checkbox>
+    </div> -->
   </div>
 </template>
 
@@ -84,11 +98,12 @@ export default {
       uploader: [{ url: "https://img01.yzcdn.cn/vant/leaf.jpg" }],
       value: "",
       showPicker: false,
+      checked: false,
     };
   },
   methods: {
-     onClickLeft() {
-      this.$router.push('/Login')
+    onClickLeft() {
+      this.$router.push("/Login");
     },
     onConfirm(value) {
       this.value = value;
@@ -129,5 +144,8 @@ export default {
   position: absolute;
   left: 2px;
   top: 15px;
+}
+.text{
+  font-size: 10px;
 }
 </style>

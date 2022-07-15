@@ -41,6 +41,11 @@ const routes = [
     path: '/register',
     name: '注册',
     component: () => import('../views/Register.vue')
+  },
+  {
+    path: '/repwd',
+    name: '修改密码',
+    component: () => import('../views/Repwd.vue')
   }
 ]
 
