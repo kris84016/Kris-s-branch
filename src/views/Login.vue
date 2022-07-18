@@ -17,6 +17,7 @@
         :rules="[{ required: true, message: '请填写用户名' }]"
       /><br />
       <van-field
+        @keyup.enter="onSubmit"
         left-icon="smile-comment-o"
         v-model="password"
         type="password"
@@ -51,79 +52,43 @@
 
 <script>
 import { Dialog } from 'vant';
+import { Toast } from 'vant';
 export default {
   name: "Login",
   data() {
     return {
       username: "",
       password: "",
-      userList: [],
     };
   },
   methods: {
-    toRepwd() {
+    toRepwd(){
       this.$router.push("/repwd");
     },
     onClickLeft() {
       this.$router.push("/");
     },
     onSubmit() {
-      //   if (this.username == "123456" && this.password == "123456") {
-      //     Toast.success("登录成功");
-      //   } else if (this.username == "" && this.password == "") {
-      //     Toast("请输入账号或密码");
-      //   } else {
-      //     Toast.fail("账号或密码错误");
-      //   }
-      // },
-      var list = localStorage.getItem("userList");
-      console.log(list);
-      if (list == null) {
-        Dialog.alert({
-          title: "",
-          message: "登录账户不存在，重新登录！",
-          theme: "round-button",
-        }).then(() => {
-          this.username = "";
-          this.password = "";
+        console.log(this.username,this.password);
+        //接口地址
+        const url="http://www.codeboy.com:9999/data/user/login.php";
+        const params = `uname=${this.username}&upwd=${this.password}`;
+        this.axios.post(url, params).then((res)=>{
+          console.log(res);
         });
-      } else {
-        this.userList = JSON.parse(list);
-        for (var i = 0; i < this.userList.length; i++) {
-          console.log(this.userList[i].name);
-          console.log(this.userList[i].pwd);
-          if (
-            this.userList[i].name == this.username &&
-            this.userList[i].pwd == this.password
-          ) {
-            Dialog.alert({
-              title: "",
-              message: "登录成功！",
-              theme: "round-button",
-            }).then(() => {
-              this.$router.replace({ path: "/" });
-            });
-            localStorage.setItem("userLogin", JSON.stringify(this.userList[i]));
-            return;
-          }
-        }
-        Dialog.alert({
-          title: "",
-          message: "登录账户不存在，重新登录！",
-          theme: "round-button",
-        }).then(() => {
-          this.username = "";
-          this.password = "";
-        });
-      }
-    },
+        // if (this.username == "123456" && this.password == "123456") {
+        //   Toast.success("登录成功");
+        // } else if (this.username == "" && this.password == "") {
+        //   Toast("请输入账号或密码");
+        // } else {
+        //   Toast.fail("账号或密码错误");
+        // }
+      },
+
     toRegister() {
       this.$router.push("/Register");
     },
   },
-   components:{
-           [Dialog.Component.name]: Dialog.Component,
-        }
 };
 </script>
 
@@ -139,6 +104,6 @@ export default {
   color: rgb(226, 33, 43);
 }
 .NoNum {
-  color: rgb(72, 72, 243);
+  color: rgb(72, 72, 243)
 }
 </style>

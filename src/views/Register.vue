@@ -74,7 +74,7 @@
         v-model="checked" 
         shape="square"
         icon-size="14px"
-        
+         
         >
         阅读并接受
           《百度用户协议》、
