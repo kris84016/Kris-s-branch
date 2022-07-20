@@ -1,4 +1,5 @@
 <template>
+  
   <div>
     <div class="icon-back" @click="tologin">
       <van-icon size="25" name="arrow-left" />
@@ -12,12 +13,18 @@
       />
     </div>
     <van-form>
-      <van-field name="uploader" label="上传头像">
-        <template #input>
-          <van-uploader v-model="uploader" />
-        </template>
-      </van-field>
       <van-cell-group>
+        <van-field
+          v-model="name"
+          required
+          label="昵称"
+          placeholder="请输入昵称"
+          :rules="[
+            { required: true },
+          ]"
+        />
+        <!-- <input type="radio" name="radios" value="1" v-model="param"><label>男</label>
+        <input type="radio" name="radios" value="2" v-model="param"><label>女</label> -->
         <van-field
           v-model="phone"
           required
@@ -28,17 +35,6 @@
             { pattern: /^1[3456789]\d{9}$/, message: '手机号码格式错误！' },
           ]"
         />
-        <van-field
-          v-model="sms"
-          center
-          clearable
-          label="短信验证码"
-          placeholder="请输入短信验证码"
-        >
-          <template #button>
-            <van-button size="small" type="primary">发送验证码</van-button>
-          </template>
-        </van-field>
         <van-field
           v-model="password"
           required
@@ -58,7 +54,7 @@
       <van-popup v-model="showPicker" position="bottom">
         <van-picker
           show-toolbar
-          :columns="columns"
+
           @confirm="onConfirm"
           @cancel="showPicker = false"
         />
@@ -69,34 +65,18 @@
         >注册</van-button
       >
     </div>
-    <!-- <div>
-        <van-checkbox 
-        v-model="checked" 
-        shape="square"
-        icon-size="14px"
-         
-        >
-        阅读并接受
-          《百度用户协议》、
-          《儿童个人信息保护声明》
-          及
-          《百度隐私权保护声明》
-        </van-checkbox>
-    </div> -->
   </div>
 </template>
-
 <script>
-import { Toast } from "vant";
+import { Toast } from 'vant';
 export default {
   data() {
     return {
+      name:"",
       phone: "",
-      sms: "",
       password: "",
       password1: "",
-      uploader: [{ url: "https://img01.yzcdn.cn/vant/leaf.jpg" }],
-      value: "",
+      // param:"1",
       showPicker: false,
       checked: false,
     };
@@ -115,7 +95,7 @@ export default {
     onsubmit() {
       if (
         this.phone == "" ||
-        this.sms == "" ||
+        this.name == "" ||
         this.password == "" ||
         this.password1 == ""
       ) {
@@ -123,17 +103,42 @@ export default {
       } else if (this.password != this.password1) {
         Toast("密码输入两次不一致！");
       } else {
-        Toast.success("注册成功");
-        this.$notify({
-          type: "success",
-          message: "注册成功,3s后返回登录",
-          duration: 3000,
-        });
-        setTimeout(() => {
-          sessionStorage.clear("regis");
-          this.$router.go(-1);
-        }, 3000);
+      //   Toast.success("注册成功");
+      //   this.$notify({
+      //     type: "success",
+      //     message: "注册成功,3s后返回登录",
+      //     duration: 3000,
+      //   });
+      //   setTimeout(() => {
+      //     sessionStorage.clear("regis");
+      //     this.$router.go(-1);
+      //   }, 3000);
       }
+      console.log(this.name,this.password,this.phone);
+      const url = "http://10.2.1.169:8080/UserRegister"
+      this.axios.get(url).then((res)=>{
+        console.log(res.data.message);
+         if(res.data.status == 200) {
+            this.$alert('是否返回登录页面', '注册成功', {
+              confirmButtonText: '确定',
+              callback: action => {
+                this.$router.push('/login')
+              }
+            })
+          }else if(res.data.status == 202) {
+            this.$alert('注册失败', {
+              confirmButtonText: '确定',
+              callback: action => {
+                this.form.username = '',
+                this.form.password = ''
+              }
+            })
+          }else{
+            console.log(res.message);
+          }
+        }).catch(err => {
+          console.log('操作错误' + err);
+        })
     },
   },
 };

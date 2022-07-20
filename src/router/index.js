@@ -42,6 +42,7 @@ const routes = [
     name: '注册',
     component: () => import('../views/Register.vue')
   },
+
   {
     path: '/repwd',
     name: '修改密码',

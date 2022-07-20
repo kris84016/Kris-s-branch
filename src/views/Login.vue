@@ -59,6 +59,7 @@ export default {
     return {
       username: "",
       password: "",
+      data: null,
     };
   },
   methods: {
@@ -71,11 +72,24 @@ export default {
     onSubmit() {
         console.log(this.username,this.password);
         //接口地址
-        const url="http://www.codeboy.com:9999/data/user/login.php";
-        const params = `uname=${this.username}&upwd=${this.password}`;
-        this.axios.post(url, params).then((res)=>{
+        const url="http://10.2.1.169:8080/passwordLogin";
+        // const params = `name=${this.username}&password=${this.password}`;
+        this.axios.get(url).then((res)=>{
+          // this.data = res.data;
           console.log(res);
-        });
+          if (res.data.code === 200) {//如果后端返回的状态码是200
+              Toast.success("登录成功");
+              this.$router.replace({//路由替换为index
+                path: '/'
+              });
+            }
+            else {
+              Toast.fail("账号或密码错误");
+            }
+          })
+        //   .catch((failResponse) => {
+        //     this.open2();
+        // });
         // if (this.username == "123456" && this.password == "123456") {
         //   Toast.success("登录成功");
         // } else if (this.username == "" && this.password == "") {
