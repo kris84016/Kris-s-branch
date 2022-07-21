@@ -10,11 +10,11 @@
     <van-form>
       <van-field
         left-icon="friends-o"
-        v-model="username"
-        name="用户名"
-        label="用户名"
-        placeholder="用户名"
-        :rules="[{ required: true, message: '请填写用户名' }]"
+        v-model="phone"
+        name="phone"
+        label="手机号"
+        placeholder="手机号"
+        :rules="[{ required: true, message: '请填写手机号' }]"
       /><br />
       <van-field
         @keyup.enter="onSubmit"
@@ -57,9 +57,8 @@ export default {
   name: "Login",
   data() {
     return {
-      username: "",
+      phone: "",
       password: "",
-      data: null,
     };
   },
   methods: {
@@ -72,11 +71,14 @@ export default {
     onSubmit() {
         console.log(this.username,this.password);
         //接口地址
-        const url="http://10.2.1.169:8080/passwordLogin";
-        // const params = `name=${this.username}&password=${this.password}`;
-        this.axios.get(url).then((res)=>{
-          // this.data = res.data;
-          console.log(res);
+        const url="http://10.44.64.121:8080/user/userLogin";
+        
+        this.axios.get(url,{
+        params : {
+                password:this.password,
+                phone:this.phone,
+              }
+            }).then((res)=>{
           if (res.data.code === 200) {//如果后端返回的状态码是200
               Toast.success("登录成功");
               this.$router.replace({//路由替换为index
@@ -87,16 +89,6 @@ export default {
               Toast.fail("账号或密码错误");
             }
           })
-        //   .catch((failResponse) => {
-        //     this.open2();
-        // });
-        // if (this.username == "123456" && this.password == "123456") {
-        //   Toast.success("登录成功");
-        // } else if (this.username == "" && this.password == "") {
-        //   Toast("请输入账号或密码");
-        // } else {
-        //   Toast.fail("账号或密码错误");
-        // }
       },
 
     toRegister() {

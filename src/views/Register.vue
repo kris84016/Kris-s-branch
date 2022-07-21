@@ -16,9 +16,30 @@
       <van-cell-group>
         <van-field
           v-model="name"
+          name = "name"
           required
           label="昵称"
           placeholder="请输入昵称"
+          :rules="[
+            { required: true },
+          ]"
+        />
+        <van-field
+          v-model="sex"
+          required
+          label="性别"
+          name = "sex"
+          placeholder="请输入性别"
+          :rules="[
+            { required: true },
+          ]"
+        />
+        <van-field
+          v-model="birth"
+          required
+          label="出生日期"
+          name = "birth"
+          placeholder="请输入出生日期 如2020-07-20"
           :rules="[
             { required: true },
           ]"
@@ -27,6 +48,7 @@
         <input type="radio" name="radios" value="2" v-model="param"><label>女</label> -->
         <van-field
           v-model="phone"
+          name = "phone"
           required
           label="手机号"
           placeholder="请输入手机号"
@@ -37,6 +59,7 @@
         />
         <van-field
           v-model="password"
+          name = "password"
           required
           type="password"
           label="密码"
@@ -76,6 +99,8 @@ export default {
       phone: "",
       password: "",
       password1: "",
+      sex:"",
+      birth:"",
       // param:"1",
       showPicker: false,
       checked: false,
@@ -112,20 +137,34 @@ export default {
       //   setTimeout(() => {
       //     sessionStorage.clear("regis");
       //     this.$router.go(-1);
-      //   }, 3000);
-      }
-      console.log(this.name,this.password,this.phone);
-      const url = "http://10.2.1.169:8080/UserRegister"
-      this.axios.get(url).then((res)=>{
-        console.log(res.data.message);
-         if(res.data.status == 200) {
-            this.$alert('是否返回登录页面', '注册成功', {
-              confirmButtonText: '确定',
-              callback: action => {
-                this.$router.push('/login')
+      //   }, 3000)
+      
+      console.log(this.name,this.password,this.phone,this.sex,this.birth);
+      const url = "http://10.44.64.121:8080/user/userReg";
+      console.log(2)
+      // const params = {
+      //           name:this.name,
+      //           password:this.password,
+      //           phone:this.phone,
+      //           sex:this.sex,
+      //           birth:this.birth
+      //         }
+      this.axios.get(url,{
+        params : {
+                name:this.name,
+                password:this.password,
+                phone:this.phone,
+                sex:this.sex,
+                birth:this.birth
               }
-            })
-          }else if(res.data.status == 202) {
+      }).then((res)=>{
+        console.log(1)
+         if(res.data.code == 200) {
+          Toast.success("注册成功");
+          //加定时器3S后跳转
+          this.$router.push('/login')
+          }else if(res.data.code  == 201) {
+            // alert("失败")
             this.$alert('注册失败', {
               confirmButtonText: '确定',
               callback: action => {
@@ -134,11 +173,12 @@ export default {
               }
             })
           }else{
-            console.log(res.message);
+            console.log(res.data.msg);
           }
         }).catch(err => {
-          console.log('操作错误' + err);
+          console.log(err);
         })
+      }
     },
   },
 };
