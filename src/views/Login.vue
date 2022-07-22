@@ -36,10 +36,6 @@
           >登录</van-button
         >
       </div>
-      <!-- <div class="reg">
-        <div type="text" @click="toRegister">没有账号？立即注册</div>
-        <div>忘记密码?</div>
-      </div> -->
     </van-form>
     <van-row type="flex" justify="space-between">
       <van-col span="10" @click="toRegister" class="NoNum"
@@ -51,7 +47,6 @@
 </template>
 
 <script>
-import { Dialog } from 'vant';
 import { Toast } from 'vant';
 export default {
   name: "Login",
@@ -79,11 +74,17 @@ export default {
                 phone:this.phone,
               }
             }).then((res)=>{
-          if (res.data.code === 200) {//如果后端返回的状态码是200
-              Toast.success("登录成功");
-              this.$router.replace({//路由替换为index
-                path: '/'
+          if (res.data.code === 200) {
+            Toast.success("登录成功,欢迎使用!")
+              this.$notify({
+                type: "success",
+                message: "登录成功,3s后返回登录",
+                duration: 3000,
               });
+              setTimeout(() => {
+                sessionStorage.clear("regis");//清空缓存
+                this.$router.push("/");
+              }, 3000);
             }
             else {
               Toast.fail("账号或密码错误");
@@ -100,8 +101,8 @@ export default {
 
 <style scoped>
 .title {
-  height: 50px;
-  line-height: 50px;
+  height: 50rem;
+  line-height: 50rem;
   background-color: #20a0ff;
   color: #fff;
   text-align: center;
